@@ -36,9 +36,9 @@ export async function GET(req: NextRequest) {
     await connectDB()
 
     try {
-        const limit = req.nextUrl.searchParams.get("limit") ?? 2
-        const page = req.nextUrl.searchParams.get("page") ?? 1
         const totalPosts = await Post.countDocuments()
+        const limit = req.nextUrl.searchParams.get("limit") ?? totalPosts
+        const page = req.nextUrl.searchParams.get("page") ?? 1
         const totalPage = Math.ceil(totalPosts / +limit)
         const allPost = await Post.find().skip((+page - 1) * +limit).limit(+limit)
         console.log({ limit, page })
