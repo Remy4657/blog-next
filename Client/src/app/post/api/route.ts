@@ -2,14 +2,14 @@ import connectDB from "@/app/config/mongoose"
 import { NextRequest, NextResponse } from "next/server";
 import Post from "@/app/config/models/Post";
 
+// create
 export async function POST(req: NextRequest) {
     await connectDB()
 
     try {
         const { title, description } = await req.json()
         const existed = await Post.findOne({ title })
-        console.log("existed: ", { existed })
-        console.log(({ title, description }))
+
         if (!existed) {
             const newPost = await Post.create({ title, description })
             return NextResponse.json({
@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
         }, { status: 400, statusText: "Created error" })
     }
 }
+
+// get all (pagination)
 export async function GET(req: NextRequest) {
     await connectDB()
 
@@ -42,7 +44,6 @@ export async function GET(req: NextRequest) {
         console.log({ limit, page })
 
         //const allPost = await Post.find()
-        console.log("allPost: ", { allPost })
 
         return NextResponse.json({
             data: allPost,
